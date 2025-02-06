@@ -3,6 +3,7 @@ import { SeminarEditModal } from "./modals/SeminarEditModal";
 import { ConfirmationModal } from "./modals/ConfirmationModal";
 import { useMutation } from "@tanstack/react-query";
 import { queryClient } from "../App";
+import { seminarsApi } from "../lib/queries";
 
 interface ISeminarItemProps {
   seminar: ISeminar;
@@ -10,16 +11,7 @@ interface ISeminarItemProps {
 
 export const SeminarItem = ({ seminar }: ISeminarItemProps) => {
   const { mutate, error } = useMutation({
-    mutationFn: async (id: string) => {
-      const del = await fetch(`http://localhost:3000/seminars/${id}`, {
-        method: "DELETE",
-      });
-      if (!del.ok) {
-        throw { message: del.statusText, status: del.status };
-      } else {
-        return del.json();
-      }
-    },
+    mutationFn: seminarsApi.deleteSeminar,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["seminarsData"] });
     },

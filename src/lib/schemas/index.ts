@@ -9,3 +9,5 @@ export const formSchema = z.object({
     .regex(/^([01]\d|2[0-3]):([0-5]\d)(:([0-5]\d))?$/, "Введите время"),
   photo: z.string().url({ message: "Введите корректное URL" }),
 });
+
+export type FormSchemaType = z.infer<typeof formSchema>;

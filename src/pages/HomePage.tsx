@@ -1,20 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { SeminarsList } from "../components/SeminarsList";
 import { useState } from "react";
 import { Button } from "../components/ui/Button";
+import { seminarsApi } from "../lib/queries";
 
 export const HomePage = () => {
   const [page, setPage] = useState<number>(1);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["seminarsData", page],
-    queryFn: async () =>
-      await fetch(
-        `http://localhost:3000/seminars?_page=${page}&_per_page=5`
-      ).then((res) => res.json()),
+    queryFn: async () => seminarsApi.getAllSeminars(page),
+    placeholderData: keepPreviousData,
   });
-
-  console.log(data);
 
   if (isLoading) {
     return (

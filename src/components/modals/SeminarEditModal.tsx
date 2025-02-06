@@ -1,16 +1,13 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { z } from "zod";
+import { useState } from "react";
+import { SubmitHandler } from "react-hook-form";
 import { ISeminar } from "../../types/ISemirnars";
-import { Input } from "../ui/Input";
-import { formSchema } from "../../lib/schemas";
+import { FormSchemaType } from "../../lib/schemas";
 import { queryClient } from "../../App";
 import { Button } from "../ui/Button";
 import { SeminarForm } from "../SeminarForm";
-
+import { seminarsApi } from "../../lib/queries";
 interface ISeminarEditModalProps {
   id: string;
 }
@@ -24,14 +21,7 @@ export const SeminarEditModal = ({ id }: ISeminarEditModalProps) => {
     isLoading,
   } = useQuery<ISeminar>({
     queryKey: ["getData", id],
-    queryFn: async () => {
-      const response = await fetch(`http://localhost:3000/seminars/${id}`);
-      if (!response.ok) {
-        throw new Error("Ошибка!");
-      } else {
-        return response.json();
-      }
-    },
+    queryFn: () => seminarsApi.getSeminar(id),
     enabled: isOpen && !!id,
   });
 
@@ -42,23 +32,14 @@ export const SeminarEditModal = ({ id }: ISeminarEditModalProps) => {
     isPending,
   } = useMutation({
     mutationKey: ["putData", id],
-    mutationFn: async (seminarsData: ISeminar): Promise<ISeminar> => {
-      const put = await fetch(`http://localhost:3000/seminars/${id}`, {
-        method: "PUT",
-        body: JSON.stringify(seminarsData),
-      });
-      if (!put.ok) {
-        throw { status: put.status };
-      } else {
-        return put.json();
-      }
-    },
+    mutationFn: async (seminarsData: ISeminar) =>
+      seminarsApi.putSeminar(id, seminarsData),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["seminarsData"] });
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = async (data) => {
+  const onSubmit: SubmitHandler<FormSchemaType> = async (data) => {
     if (id) {
       updateSeminare({
         id,

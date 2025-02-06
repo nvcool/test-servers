@@ -1,15 +1,14 @@
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "./ui/Input";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { formSchema } from "../lib/schemas";
+import { formSchema, FormSchemaType } from "../lib/schemas";
 import { Button } from "./ui/Button";
 import { Textarea } from "./ui/Textarea";
 import { ISeminar } from "../types/ISemirnars";
 
 interface ISeminarFormProps {
-  onSubmit: SubmitHandler<z.infer<typeof formSchema>>;
+  onSubmit: SubmitHandler<FormSchemaType>;
   seminar?: ISeminar;
   isSuccess?: boolean;
   isLoading?: boolean;
@@ -21,7 +20,7 @@ export const SeminarForm = ({
   isSuccess,
   isLoading,
 }: ISeminarFormProps) => {
-  const { handleSubmit, control, reset } = useForm<z.infer<typeof formSchema>>({
+  const { handleSubmit, control, reset } = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
   });
 
