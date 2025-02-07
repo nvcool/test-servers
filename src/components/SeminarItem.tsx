@@ -21,6 +21,7 @@ export const SeminarItem = ({ seminar }: ISeminarItemProps) => {
     return <h3 className="text-3xl font-semibold"> Error: </h3> + error.message;
   }
 
+  // Обработчик для удаления семинара по id
   const handleDelete = (id: string) => {
     mutate(id);
   };

@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// Определение схемы валидации для формы с помощью Zod
 export const formSchema = z.object({
   title: z.string().min(5, { message: "Минимум 5 символов!" }),
   description: z.string().min(20, { message: "Минимум 20 символов!" }),

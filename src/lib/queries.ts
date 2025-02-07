@@ -4,9 +4,14 @@ import { FormSchemaType } from "./schemas";
 import { ISeminar } from "../types/ISemirnars";
 
 export const seminarsApi = {
+  // Метод для получения списка семинаров с пагинацией
   getAllSeminars: (page: number) =>
     fetchHandler(fetch(`${API_URL}/seminars?_page=${page}&_per_page=5`)),
+
+  // Метод для получения информации о конкретном семинаре по ID
   getSeminar: (id: string) => fetchHandler(fetch(`${API_URL}/seminars/${id}`)),
+
+  // Метод для создания нового семинара
   createSeminar: (newSeminarData: FormSchemaType) =>
     fetchHandler(
       fetch(`${API_URL}/seminars`, {
@@ -20,6 +25,8 @@ export const seminarsApi = {
         }),
       })
     ),
+
+  // Метод для обновления данных семинара по ID
   putSeminar: (id: string, seminarData: ISeminar) =>
     fetchHandler(
       fetch(`${API_URL}/seminars/${id}`, {
@@ -27,6 +34,8 @@ export const seminarsApi = {
         body: JSON.stringify(seminarData),
       })
     ),
+
+  // Метод для удаления семинара по ID
   deleteSeminar: (id: string) =>
     fetchHandler(
       fetch(`${API_URL}/seminars/${id}`, {

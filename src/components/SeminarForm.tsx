@@ -24,8 +24,10 @@ export const SeminarForm = ({
     resolver: zodResolver(formSchema),
   });
 
+  // Этот useEffect срабатывает, когда форма была успешно отправлена
   useEffect(() => {
     if (isSuccess) {
+      // Если отправка была успешной, сбрасываем форму
       reset({
         title: "",
         description: "",
@@ -36,11 +38,15 @@ export const SeminarForm = ({
     }
   }, [isSuccess]);
 
+  // Этот useEffect срабатывает, когда приходят данные семинара для редактирования
   useEffect(() => {
     if (seminar) {
+      // Заполняем форму данными семинара
       reset({
         title: seminar.title,
         description: seminar.description,
+
+        // Преобразуем дату в формат YYYY-MM-DD
         date: new Date(seminar.date.split(".").reverse().join("-"))
           .toISOString()
           .split("T")[0],
@@ -48,6 +54,7 @@ export const SeminarForm = ({
         photo: seminar.photo,
       });
     } else {
+      // Если семинар не передан, сбрасываем форму
       reset();
     }
   }, [seminar]);

@@ -1,3 +1,4 @@
+// interface который описывает структуру данных семинара
 export interface ISeminar {
   id: string;
   title: string;
